@@ -12,3 +12,12 @@ def send_verification_email(email, code):
     message = f'Your verification code is {code}. Please enter this code to complete your registration.'
     email_from = settings.EMAIL_HOST_USER
     send_mail(subject, message, email_from, [email])
+
+def generate_verification_code():
+    return str(random.randint(100000, 999999))
+
+def send_reset_password_email(email, code):
+    subject = 'Password Reset Verification Code'
+    message = f'Your password reset verification code is {code}. Please use this code to reset your password.'
+    email_from = settings.EMAIL_HOST_USER
+    send_mail(subject, message, email_from, [email])

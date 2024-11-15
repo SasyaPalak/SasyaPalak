@@ -6,7 +6,12 @@ from django.core.cache import cache
 from django.contrib.auth.hashers import check_password, make_password
 from .models import User
 from .serializers import UserSerializer, LoginSerializer
-from .utils import generate_verification_code, send_verification_email
+from .utils import generate_verification_code, send_verification_email,generate_verification_code,send_reset_password_email
+from .serializers import (
+    PasswordResetRequestSerializer,
+    PasswordResetVerifySerializer,
+    PasswordChangeSerializer,
+)
 from .serializers import ChangePasswordSerializer
 import logging
 from api.models import User
@@ -149,3 +154,60 @@ def check_user_password(request):
         print("Error occurred:", e)
         traceback.print_exc()
         return JsonResponse({'error': 'Internal Server Error'}, status=500)
+    
+    
+
+@api_view(['POST'])
+def request_password_reset(request):
+    serializer = PasswordResetRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        email = serializer.validated_data['email']
+        try:
+            user = User.objects.get(email=email)
+            # Generate reset code and send email
+            reset_code = generate_verification_code()
+            user.reset_password_code = reset_code
+            user.save()
+            send_reset_password_email(user.email, reset_code)
+            return Response({'message': 'Verification code sent to your email.'}, status=200)
+        except User.DoesNotExist:
+            return Response({'error': 'Email not found.'}, status=404)
+    return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def verify_reset_code(request):
+    serializer = PasswordResetVerifySerializer(data=request.data)
+    if serializer.is_valid():
+        email = serializer.validated_data['email']
+        code = serializer.validated_data['code']
+        try:
+            user = User.objects.get(email=email)
+            if user.reset_password_code == code:
+                # Clear the reset_password_code to allow password change
+                user.reset_password_code = None
+                user.save()
+                return Response({'message': 'Verification successful. You can now reset your password.'}, status=200)
+            return Response({'error': 'Invalid verification code.'}, status=400)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=404)
+    return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def change_password(request):
+    serializer = PasswordChangeSerializer(data=request.data)
+    if serializer.is_valid():
+        email = serializer.validated_data['email']
+        new_password = serializer.validated_data['new_password']
+        try:
+            user = User.objects.get(email=email)
+            # Check if the user has been verified
+            if user.reset_password_code is not None:
+                return Response({'error': 'Please verify the code before changing your password.'}, status=400)
+            
+            # Change the password if verification is successful
+            user.password = make_password(new_password)
+            user.save()
+            return Response({'message': 'Password changed successfully.'}, status=200)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=404)
+    return Response(serializer.errors, status=400)

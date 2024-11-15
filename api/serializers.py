@@ -25,3 +25,14 @@ class ChangePasswordSerializer(serializers.Serializer):
         if len(new_password) < 8:
             raise serializers.ValidationError("New password must be at least 8 characters long.")
         return data
+    
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class PasswordResetVerifySerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.CharField(max_length=6)
+
+class PasswordChangeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    new_password = serializers.CharField(write_only=True)
