@@ -15,6 +15,7 @@ class User(models.Model):
     password = models.CharField(max_length=100)
     address = models.TextField()
     phone_number = models.CharField(max_length=15)
+    is_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.email
