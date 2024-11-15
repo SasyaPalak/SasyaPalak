@@ -3,9 +3,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.cache import cache
+from django.contrib.auth.hashers import check_password, make_password
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, LoginSerializer
 from .utils import generate_verification_code, send_verification_email
+from .serializers import ChangePasswordSerializer
+import logging
+from api.models import User
+from django.http import JsonResponse
+import traceback
 
 CACHE_TIMEOUT = 300  # 5 minutes
 
@@ -52,3 +58,94 @@ def verify_user(request):
         return Response({'message': 'Email verified and user registered successfully.'}, status=status.HTTP_201_CREATED)
     
     return Response({'error': 'Invalid verification code.'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def login_user(request):
+    serializer = LoginSerializer(data=request.data)
+    if serializer.is_valid():
+        email = serializer.validated_data['email']
+        password = serializer.validated_data['password']
+
+        try:
+            user = User.objects.get(email=email)
+            if not user.is_verified:
+                return Response({'error': 'Email is not verified.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            if check_password(password, user.password):
+                return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+logger = logging.getLogger(__name__)
+@api_view(['POST'])
+def reset_password(request):
+    try:
+        email = request.data.get('email')
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+
+        # Check if all fields are provided
+        if not email or not old_password or not new_password:
+            return JsonResponse({'error': 'Email, old password, and new password are required'}, status=400)
+
+        # Fetch user from the database
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+
+        # Debugging log: check fetched user details
+        print(f"User found: {user.email}")
+
+        # Check if the old password matches
+        if not check_password(old_password, user.password):
+            print(f"Old password check failed for user: {user.email}")
+            return JsonResponse({'error': 'Old password is incorrect'}, status=400)
+
+        # Debugging log: check before updating password
+        print("Old password verified. Proceeding to update the password...")
+
+        # Update to the new password (hash it before saving)
+        user.password = make_password(new_password)
+        user.save()
+
+        # Debugging log: confirm password update
+        print(f"Password updated successfully for user: {user.email}")
+
+        return JsonResponse({'message': 'Password updated successfully'}, status=200)
+    
+    except Exception as e:
+        # Log the full error traceback for debugging
+        print("Error occurred:", e)
+        traceback.print_exc()
+        return JsonResponse({'error': 'Internal Server Error'}, status=500)
+
+def check_user_password(request):
+    try:
+        email = request.GET.get('email')
+        old_password = request.GET.get('old_password')
+
+        # Validate email and password parameters
+        if not email or not old_password:
+            return JsonResponse({'error': 'Email and password are required'}, status=400)
+
+        # Fetch user from the database
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+
+        # Check if the provided password matches the hashed password
+        is_correct_password = check_password(old_password, user.password)
+        return JsonResponse({'password_match': is_correct_password})
+    
+    except Exception as e:
+        # Log the error with traceback
+        print("Error occurred:", e)
+        traceback.print_exc()
+        return JsonResponse({'error': 'Internal Server Error'}, status=500)
