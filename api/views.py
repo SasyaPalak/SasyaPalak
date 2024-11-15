@@ -211,3 +211,4 @@ def change_password(request):
         except User.DoesNotExist:
             return Response({'error': 'User not found.'}, status=404)
     return Response(serializer.errors, status=400)
+
