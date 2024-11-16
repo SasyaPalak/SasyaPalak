@@ -1,0 +1,126 @@
+/* CropYield.css */
+
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+/* Form Container */
+.crop-yield-form {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Heading */
+.crop-yield-form h2 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Label Styles */
+.crop-yield-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Input and Select Styles */
+.crop-yield-form input,
+.crop-yield-form select {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: #ffffff; /* Ensure white background */
+  color: #000; /* Ensure text color is black */
+}
+
+/* Focused Input Style */
+.crop-yield-form input:focus,
+.crop-yield-form select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button Styles */
+.crop-yield-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.crop-yield-form button:hover {
+  background-color: #0056b3;
+}
+
+.crop-yield-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Remove number input spinner (arrows) */
+.crop-yield-form input[type="number"]::-webkit-inner-spin-button,
+.crop-yield-form input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.crop-yield-form input[type="number"] {
+  -moz-appearance: textfield; / For Firefox */
+
+/* Success and Error Messages */
+.success-message {
+  margin-top: 20px;
+  color: #28a745;
+  font-weight: bold;
+  text-align: center;
+}
+
+.error-message {
+  margin-top: 20px;
+  color: #dc3545;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .crop-yield-form {
+    padding: 15px;
+  }
+
+  .crop-yield-form h2 {
+    font-size: 1.5rem;
+  }
+
+  .crop-yield-form input,
+  .crop-yield-form select {
+    padding: 8px;
+  }
+
+  .crop-yield-form button {
+    padding: 10px;
+  }
+}
