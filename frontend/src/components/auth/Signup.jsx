@@ -13,7 +13,7 @@ function Signup() {
     password: "",
     phone: "",
     region: "",
-    imageUrl: "/images/user.png", // Default image for the user
+    imageUrl: "/images/user.png", 
   });
 
   const [message, setMessage] = useState("");
