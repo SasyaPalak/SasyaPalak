@@ -1,6 +1,6 @@
 # api/serializers.py
 from rest_framework import serializers
-from .models import User
+from .models import User,CropPrice
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,3 +36,9 @@ class PasswordResetVerifySerializer(serializers.Serializer):
 class PasswordChangeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     new_password = serializers.CharField(write_only=True)
+
+
+class CropPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CropPrice
+        fields = ['id', 'crop_name', 'average_price']

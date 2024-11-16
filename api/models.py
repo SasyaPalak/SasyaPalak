@@ -31,3 +31,9 @@ class User(models.Model):
     def __str__(self):
         return self.email
 
+class CropPrice(models.Model):
+    crop_name = models.CharField(max_length=100)
+    average_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.crop_name} - NPR {self.average_price}"

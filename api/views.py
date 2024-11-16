@@ -4,13 +4,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.cache import cache
 from django.contrib.auth.hashers import check_password, make_password
-from .models import User
+from .models import User,CropPrice
 from .serializers import UserSerializer, LoginSerializer
 from .utils import generate_verification_code, send_verification_email,generate_verification_code,send_reset_password_email
 from .serializers import (
     PasswordResetRequestSerializer,
     PasswordResetVerifySerializer,
     PasswordChangeSerializer,
+    CropPriceSerializer
 )
 from .serializers import ChangePasswordSerializer
 import logging
@@ -212,8 +213,7 @@ def change_password(request):
             return Response({'error': 'User not found.'}, status=404)
     return Response(serializer.errors, status=400)
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+
 from loan_training import predict_loan_status  # Import from ml_models
 
 @api_view(['POST'])
@@ -234,20 +234,31 @@ def loan_prediction(request):
     except Exception as e:
         return Response({'error': str(e)}, status=500)
     
-    from crop_training import predict_crop_yield
-    @api_view(['POST'])
-    def crop_prediction(request):
-        try:
-            new_data = request.data
-            required_fields = ['Region','Season','Crop','Area']
-            
-            # Check if all required fields are present
-            for field in required_fields:
-                if field not in new_data:
-                    return Response({'error': f'Missing field: {field}'}, status=400)
-            
-            # Make a prediction using the loaded ML model
-            prediction = predict_crop_yield(new_data)
-            return Response(prediction, status=200)
-        except Exception as e:
-            return Response({'error': str(e)}, status=500)
+from crop_training import predict_crop_yield
+@api_view(['POST'])
+def crop_yield_prediction_view(request):
+    """
+    API endpoint to predict crop yield.
+    """
+    try:
+        # Extract data from request body
+        data = request.data
+
+        # Check if required fields are provided
+        if not all(k in data for k in ('Region', 'Season', 'Crop', 'Area')):
+            return Response({"error": "Missing fields in request"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Make prediction
+        result = predict_crop_yield(data)
+
+        return Response(result, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+def get_crop_prices(request):
+    crops = CropPrice.objects.all()
+    serializer = CropPriceSerializer(crops, many=True)
+    return Response(serializer.data)
