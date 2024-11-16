@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django.contrib.auth.hashers import check_password, make_password
 from .models import User
 from .serializers import UserSerializer, LoginSerializer
-from .utils import generate_verification_code, send_verification_email,generate_verification_code,send_reset_password_email
+from .utils import generate_verification_code,generate_verification_code,send_reset_password_email
 from .serializers import (
     PasswordResetRequestSerializer,
     PasswordResetVerifySerializer,
@@ -22,6 +22,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from loan_training import predict_loan_status
 
 CACHE_TIMEOUT = 300  # 5 minutes
 
@@ -31,21 +32,12 @@ def register_user(request):
     serializer = UserSerializer(data=request.data)
     
     if serializer.is_valid():
-        email = serializer.validated_data['email']
-
-        # Generate a verification code
-        verification_code = generate_verification_code()
-
-        # Send verification email
-        send_verification_email(email, verification_code)
-
-        # Store user data in cache for 5 minutes
-        cache.set(f"temp_user_{email}", serializer.validated_data, CACHE_TIMEOUT)
-        cache.set(f"verification_code_{email}", verification_code, CACHE_TIMEOUT)
+        # Save the user data directly to the database
+        user = serializer.save()
 
         return Response(
-            {'message': 'Check your email for the verification code.'}, 
-            status=status.HTTP_200_OK
+            {'message': 'User registered successfully.'}, 
+            status=status.HTTP_201_CREATED
         )
     
     # Print detailed errors if the serializer is not valid
@@ -56,35 +48,6 @@ def register_user(request):
     print("Serializer Errors:", serializer.errors)  # Debugging line
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-def verify_user(request):
-    # Extract email and code from the request data
-    email = request.data.get('email')
-    code = request.data.get('code')  # Ensure 'code' is being used
-
-    # Debugging: Log incoming data
-    print("Received Email:", email)
-    print("Received OTP Code:", code)
-
-    # Retrieve the stored verification code and user data from the cache
-    stored_code = cache.get(f"verification_code_{email}")
-    user_data = cache.get(f"temp_user_{email}")
-
-    # More debugging
-    print("Stored Code from Cache:", stored_code)
-    print("User Data from Cache:", user_data)
-
-    if not stored_code or not user_data:
-        return Response({'error': 'Verification code expired or invalid.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    if stored_code == code:
-        # Save the verified user to the database
-        user = User.objects.create(**user_data, is_verified=True)
-        cache.delete(f"temp_user_{email}")
-        cache.delete(f"verification_code_{email}")
-        return Response({'message': 'Email verified and user registered successfully.'}, status=status.HTTP_201_CREATED)
-
-    return Response({'error': 'Invalid verification code.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -97,8 +60,7 @@ def login_user(request):
 
         try:
             user = User.objects.get(email=email)
-            if not user.is_verified:
-                return Response({'error': 'Email is not verified.'}, status=status.HTTP_400_BAD_REQUEST)
+            
 
             if check_password(password, user.password):
                 return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
@@ -109,8 +71,6 @@ def login_user(request):
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 
@@ -244,38 +204,69 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from loan_training import predict_loan_status  # Import from ml_models
 
+
+
+from crop_train import predict_crop_yield
+
+@api_view(['POST'])
+def crop_yield_prediction_view(request):
+    """
+    API endpoint to predict crop yield.
+    """
+    
+    
+        # Extract data from request body
+    data = request.data
+    print(data)
+    data['Region'] = int(data.get('Region', 0))  # Convert 'region' to integer
+    data['Area'] = float(data.get('Area', 0)) 
+    data['Season'] = int(data.get('Season', 0))  # Convert 'region' to integer
+    data['Crop'] = float(data.get('Crop', 0))   # Convert 'area' to float (in case it's a decimal)
+      # Convert 'area' to float (in case it's a decimal)    
+        # Make prediction
+    result = predict_crop_yield(data)
+
+    return Response(result, status=status.HTTP_200_OK)
+    
+    
+
 @api_view(['POST'])
 def loan_prediction(request):
-    try:
-        new_data = request.data
-        required_fields = ['Gender', 'Married', 'Dependents', 'Education', 'Self_Employed', 
-                           'ApplicantIncome', 'LoanAmount', 'Property_Area']
-        
-        # Check if all required fields are present
-        for field in required_fields:
-            if field not in new_data:
-                return Response({'error': f'Missing field: {field}'}, status=400)
-        
-        # Make a prediction using the loaded ML model
-        prediction = predict_loan_status(new_data)
-        return Response({'Loan_Status': prediction}, status=200)
-    except Exception as e:
-        return Response({'error': str(e)}, status=500)
+    new_data = request.data
+    print("Received data:", new_data)
+    
+    # Convert values to float and update new_data
+    
+    new_data['LoanAmount'] = float(new_data.get('LoanAmount', 0))
+    new_data['CoapplicantIncome'] = float(new_data.get('CoapplicantIncome', 0))
+    new_data['Loan_Amount_Term'] = float(new_data.get('Loan_Amount_Term', 0))
+    new_data['Credit_History'] = float(new_data.get('Credit_History', 0))
+    new_data['ApplicantIncome'] = float(new_data.get('ApplicantIncome', 0))
+    # Print the updated data for debugging
+    print("Updated data:", new_data)
+
+    # Now, pass updated `new_data` to the prediction function
+    prediction = predict_loan_status(new_data)
+    print("Prediction:", prediction)
+
+    return Response({'loan_status': prediction}, status=200)
 
 
 class LoanCalculationView(APIView):
     def post(self, request):
         # Extract values from the request data
-        crop_yield = request.data.get('crop_yield_prediction')
+        crop_type = request.data.get('crop_type')
+        crop_yield = float(request.data.get('crop_yield_prediction', 0))
+        loan_amount = float(request.data.get('loan_amount_requested', 0))
+        interest_rate = float(request.data.get('interest_rate', 0))
+        loan_tenure = float(request.data.get('loan_tenure', 0))
         market_price = request.data.get('market_price')
-        loan_amount = request.data.get('loan_amount_requested')
-        interest_rate = request.data.get('interest_rate')
-        loan_tenure = request.data.get('loan_tenure')
-
-        # Calculate Expected Revenue (correct formula)
+        # Fetch market price from the database based on crop type
+        
+        # Calculate Expected Revenue
         expected_revenue = crop_yield * market_price
 
-        # Calculate Total Repayment (simple interest)
+        # Calculate Total Repayment (Simple Interest)
         total_repayment = loan_amount * (1 + interest_rate * loan_tenure)
 
         # Calculate Net Income
@@ -287,4 +278,3 @@ class LoanCalculationView(APIView):
             'total_repayment': total_repayment,
             'net_income': net_income
         }, status=status.HTTP_200_OK)
-    

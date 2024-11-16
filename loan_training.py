@@ -92,20 +92,3 @@ def predict_loan_status(new_data):
     prediction = model.predict([features])
     return label_encoders['Loan_Status'].inverse_transform(prediction)[0]
 
-# Example: Predict for a new farmer
-new_farmer = {
-    'Gender': 'Male',
-    'Married': 'Yes',
-    'Dependents': '1',
-    'Education': 'Graduate',
-    'Self_Employed': 'No',
-    'ApplicantIncome': 5000,
-    'CoapplicantIncome': 2000,
-    'LoanAmount': 150,
-    'Loan_Amount_Term': 360,
-    'Credit_History': 1,
-    'Property_Area': 'Urban'
-}
-
-result = predict_loan_status(new_farmer)
-print("Loan Status for the new farmer:", result)
