@@ -6,14 +6,13 @@ import Footer from "../layout/footer";
 
 function Signup() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     gender: "",
     email: "",
     password: "",
-    phone: "",
-    region: "",
-    imageUrl: "/images/user.png", 
+    address: "",
+    phone_number: "",
   });
 
   const [message, setMessage] = useState("");
@@ -45,18 +44,29 @@ function Signup() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/register/", formData);
+      const response = await axios.post(
+        "http://192.168.137.70:8000/api/register/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       if (response.status === 200) {
         setMessage("Signup successful. Redirecting to OTP verification...");
         setTimeout(() => {
-          navigate("/otp-verification", { state: { email: formData.email } });
+          navigate("/verify-otp", { state: { email: formData.email } });
         }, 2000);
       }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.detail || "An unexpected error occurred.";
-      setMessage(`Error: ${errorMessage}`);
+      setLoading(false);
+      console.error("Error Response:", error.response?.data);
       setError(true);
+      setMessage(
+        error.response?.data?.detail || "Signup failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -64,22 +74,22 @@ function Signup() {
 
   return (
     <div>
-      <Navbar /> {/* Add Navbar here */}
+      <Navbar />
       <div className="signup-form">
         <h2>Signup</h2>
         <form onSubmit={handleSignup}>
           <input
             type="text"
-            name="firstName"
-            value={formData.firstName}
+            name="first_name"
+            value={formData.first_name}
             onChange={handleChange}
             placeholder="First Name"
             required
           />
           <input
             type="text"
-            name="lastName"
-            value={formData.lastName}
+            name="last_name"
+            value={formData.last_name}
             onChange={handleChange}
             placeholder="Last Name"
             required
@@ -121,18 +131,18 @@ function Signup() {
           />
           <input
             type="tel"
-            name="phone"
-            value={formData.phone}
+            name="phone_number"
+            value={formData.phone_number}
             onChange={handleChange}
             placeholder="Phone Number"
             required
           />
           <div>
-            <label htmlFor="region">Select Region:</label>
+            <label htmlFor="address">Select Region:</label>
             <select
-              name="region"
-              id="region"
-              value={formData.region}
+              name="address"
+              id="address"
+              value={formData.address}
               onChange={handleChange}
               required
             >
@@ -152,7 +162,6 @@ function Signup() {
         </form>
         {message && <p style={{ color: error ? "red" : "green" }}>{message}</p>}
       </div>
-      {/*Footer*/}
       <Footer />
     </div>
   );

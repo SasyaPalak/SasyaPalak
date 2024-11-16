@@ -23,9 +23,13 @@ function OTPVerify() {
     console.log("Entered OTP:", otp);
 
     try {
-      const response = await axios.post("/verify-otp/", {
-        email: storedEmail,
-        otp: parseInt(otp),
+      const response = await axios.post("http://192.168.137.70:8000/api/verify/", {
+        email: storedEmail, // Ensure storedEmail is defined and valid
+        otp: parseInt(otp), // Ensure otp is a number
+      }, {
+        headers: {
+          'Content-Type': 'application/json', // Set headers
+        }
       });
 
       if (response.status === 200) {
