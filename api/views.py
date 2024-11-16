@@ -233,3 +233,21 @@ def loan_prediction(request):
         return Response({'Loan_Status': prediction}, status=200)
     except Exception as e:
         return Response({'error': str(e)}, status=500)
+    
+    from crop_training import predict_crop_yield
+    @api_view(['POST'])
+    def crop_prediction(request):
+        try:
+            new_data = request.data
+            required_fields = ['Region','Season','Crop','Area']
+            
+            # Check if all required fields are present
+            for field in required_fields:
+                if field not in new_data:
+                    return Response({'error': f'Missing field: {field}'}, status=400)
+            
+            # Make a prediction using the loaded ML model
+            prediction = predict_crop_yield(new_data)
+            return Response(prediction, status=200)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
