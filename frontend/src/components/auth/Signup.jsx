@@ -45,7 +45,7 @@ function Signup() {
     setLoading(true);
 
     try {
-      const response = await axios.post("/signup", formData);
+      const response = await axios.post("http://localhost:8000/api/register/", formData);
       if (response.status === 200) {
         setMessage("Signup successful. Redirecting to OTP verification...");
         setTimeout(() => {
