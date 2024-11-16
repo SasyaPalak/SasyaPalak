@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "../../routes/axios";
+import "../../styles/Login.css"; // Import CSS file
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <input
@@ -53,7 +54,7 @@ function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-      {message && <p>{message}</p>}
+      {message && <p className={message.includes("Failed") ? "error-message" : "success-message"}>{message}</p>}
       <p>
         Don&apos;t have an account?{" "}
         <Link to="/signup">Register here</Link>
