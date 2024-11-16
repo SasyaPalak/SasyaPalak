@@ -212,3 +212,24 @@ def change_password(request):
             return Response({'error': 'User not found.'}, status=404)
     return Response(serializer.errors, status=400)
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from loan_training import predict_loan_status  # Import from ml_models
+
+@api_view(['POST'])
+def loan_prediction(request):
+    try:
+        new_data = request.data
+        required_fields = ['Gender', 'Married', 'Dependents', 'Education', 'Self_Employed', 
+                           'ApplicantIncome', 'LoanAmount', 'Property_Area']
+        
+        # Check if all required fields are present
+        for field in required_fields:
+            if field not in new_data:
+                return Response({'error': f'Missing field: {field}'}, status=400)
+        
+        # Make a prediction using the loaded ML model
+        prediction = predict_loan_status(new_data)
+        return Response({'Loan_Status': prediction}, status=200)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
