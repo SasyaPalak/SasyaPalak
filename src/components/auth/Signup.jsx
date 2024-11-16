@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import BackButton from "../layout/BackButton";
+import "../../styles/Signup.css"
 
 function Signup() {
   const [formData, setFormData] = useState({

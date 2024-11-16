@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import Navbar from "../layout/navbar";
 import Footer from "../layout/footer";
 import "../../styles/CropYield.css";
@@ -9,14 +10,14 @@ function CropYield() {
     region: "",
     season: "",
     crop: "",
-    production: "",
     area: "",
-    email: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate(); // Initialize useNavigate hook for navigation
 
   // Dropdown options
   const regions = [
@@ -74,24 +75,34 @@ function CropYield() {
 
     try {
       // Send POST request to backend
-      await axios.post("/crop-yield/", formData);
+      const response = await axios.post("http://192.168.137.70:8000/api/crop_tr/", formData);
+      console.log(formData);
 
-      // Display success message
-      setSuccessMessage("Data submitted successfully!");
+      // Check if response is successful and crop yield is good
+      if (response.status === 200) {
+        if (response.data.cropYieldStatus === "good") {
+          setSuccessMessage("Congratulations! Good crop yield! You can proceed to profit calculation.");
+          setTimeout(() => {
+            // Redirect to calculation-profit page
+            navigate("/financial-calculation"); 
+          }, 2000); 
+        } else {
+          setSuccessMessage("Don't lose hope! You can try again next season.");
+        }
 
-      // Reset form after successful submission
-      setFormData({
-        region: "",
-        season: "",
-        crop: "",
-        production: "",
-        area: "",
-        email: "", // Reset email field
-      });
+        setFormData({
+          region: "",
+          season: "",
+          crop: "",
+          area: "",
+        });
+      }
     } catch (err) {
       // Handle error case
       setError("Error submitting data. Please try again.");
+      console.error("Error submitting data:", err);
     } finally {
+      // Reset loading state
       setLoading(false);
     }
   };
@@ -104,22 +115,6 @@ function CropYield() {
       <div className="crop-yield-form">
         <h2>Crop Yield Form</h2>
         <form onSubmit={handleSubmit}>
-          {/* Email - Added at the top of the form */}
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email address"
-            required
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            title="Please enter a valid email address"
-            className="email-input"
-          />
-          <br />
-
           {/* Region */}
           <label htmlFor="region">Region:</label>
           <select
@@ -130,8 +125,8 @@ function CropYield() {
             required
           >
             <option value="">-- Select Region --</option>
-            {regions.map((region) => (
-              <option key={region} value={region}>
+            {regions.map((region, index) => (
+              <option key={index} value={index + 1}>
                 {region}
               </option>
             ))}
@@ -148,8 +143,8 @@ function CropYield() {
             required
           >
             <option value="">-- Select Season --</option>
-            {seasons.map((season) => (
-              <option key={season} value={season}>
+            {seasons.map((season, index) => (
+              <option key={index} value={index + 1}>
                 {season}
               </option>
             ))}
@@ -166,27 +161,12 @@ function CropYield() {
             required
           >
             <option value="">-- Select Crop --</option>
-            {crops.map((crop) => (
-              <option key={crop} value={crop}>
+            {crops.map((crop, index) => (
+              <option key={index} value={index + 1}>
                 {crop}
               </option>
             ))}
           </select>
-          <br />
-
-          {/* Production */}
-          <label htmlFor="production">Production (tons):</label>
-          <input
-            type="number"
-            id="production"
-            name="production"
-            value={formData.production}
-            onChange={handleChange}
-            placeholder="Enter production (tons)"
-            min="0"
-            step="0.1"
-            required
-          />
           <br />
 
           {/* Area */}

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import profile from "../../assets/user.png";
 import "../../styles/Navbar.css";
 
 function Navbar() {
   const [user, setUser] = useState({ imageUrl: profile });
-  const [showLogout, setShowLogout] = useState(false); // State for logout button visibility
-  const navigate = useNavigate(); // For navigation
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,15 +21,6 @@ function Navbar() {
 
     fetchUser();
   }, []);
-
-  const handleLogout = async () => {
-    try {
-      await axios.post("/api/user/logout");
-      navigate("/");
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
-  };
 
   return (
     <nav className="navbar">
@@ -57,17 +46,8 @@ function Navbar() {
         </div>
 
         {/* User Profile Section */}
-        <div
-          className="user-profile"
-          onMouseEnter={() => setShowLogout(true)}
-          onMouseLeave={() => setShowLogout(false)}
-        >
+        <div className="user-profile">
           <img src={user.imageUrl} alt="User Profile" className="user-image" />
-          {showLogout && (
-            <button className="logout-button" onClick={handleLogout}>
-              <img src="/path-to-your-image/logout.png" alt="Logout" />
-            </button>
-          )}
         </div>
       </div>
     </nav>

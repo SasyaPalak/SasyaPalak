@@ -1,0 +1,123 @@
+/* Styles for the Login component */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, rgba(173, 216, 230, 0.5), rgba(0, 123, 255, 0.5));
+  }
+  
+  .back-button-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+  
+  .back-button {
+    background: transparent;
+    border: none;
+    color: #000;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .back-icon {
+    margin-right: 8px;
+    font-size: 20px;
+  }
+  
+  .login-box {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    transition: transform 0.3s ease;
+  }
+  
+  .login-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .input-field {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+    transition: border 0.3s ease;
+  }
+  
+  .input-field:focus {
+    border-color: #007bff;
+  }
+  
+  .submit-button {
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-button:disabled {
+    background-color: #b0d0ff;
+    cursor: not-allowed;
+  }
+  
+  .submit-button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  
+  .message {
+    padding: 15px;
+    margin-top: 15px;
+    text-align: center;
+    border-radius: 8px;
+  }
+  
+  .success-message {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .extra-options {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .link-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .link-button:hover {
+    color: #0056b3;
+  }
+  

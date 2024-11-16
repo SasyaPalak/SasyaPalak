@@ -16,6 +16,7 @@ import LoanForm from "./components/feed/loanForm.jsx";
 import CropYield from "./components/feed/cropPrediction.jsx";
 import FinancialTable from "./components/feed/FinancialTable.jsx";
 
+
 function App() {
   return (
     <Router>
@@ -34,7 +35,7 @@ function App() {
         <Route path="/admin/view-message" element={<ViewMessages />} />
         <Route path="/loan-form" element={<LoanForm />} />
         <Route path="/crop-yield" element={<CropYield />} />
-        <Route path="/final-result" element={<FinancialTable />} />
+        <Route path="/financial-calculation" element= {<FinancialTable/>}/>
       </Routes>
     </Router>
   );

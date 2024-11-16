@@ -32,16 +32,6 @@ function Dashboard() {
             Predict Now
           </Link>
         </div>
-
-        <div className="service-card">
-          <h2 className="service-title">Crop Disease Detection</h2>
-          <p className="service-description">
-            Identify and prevent crop diseases using advanced image recognition.
-          </p>
-          <Link to="/disease-detection" className="service-button">
-            Diagnose Disease
-          </Link>
-        </div>
       </section>
 
       {/* Footer */}

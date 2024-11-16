@@ -1,3 +1,4 @@
+/* Navbar Styles */
 .navbar {
   background: linear-gradient(
     to right,
@@ -66,26 +67,11 @@
   transform: translateY(-2px);
 }
 
-.nav-link::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: 0;
-  left: 50%;
-  background-color: #2c5282;
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
-}
-
-.nav-link:hover::after {
-  width: 80%;
-}
-
 /* User Profile Section */
 .user-profile {
-  flex-shrink: 0;
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .user-image {
@@ -93,40 +79,38 @@
   height: 40px;
   border-radius: 50%;
   border: 2px solid #2c5282;
-  transition: all 0.3s ease;
   object-fit: cover;
-  background-color: #f7fafc;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .user-image:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(44, 82, 130, 0.2);
-  border-color: #1a365d;
 }
 
-/* Loading state for user image */
-.user-image.loading {
-  animation: pulse 1.5s infinite;
+.separator {
+  color: #4a5568;
+  font-weight: bold;
+  padding: 0 0.5rem;
 }
 
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 1;
-  }
+.logout-button {
+  background: none;
+  border: none;
+  color: #2c5282;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.logout-button:hover {
+  color: #1a365d;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .navbar {
-    padding: 0.75rem 1rem;
-  }
-
   .navbar-container {
     justify-content: space-between;
     padding: 0;
@@ -147,7 +131,6 @@
     transform: translateY(-10px);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    margin-right: 0;
   }
 
   .navbar-links.active {
@@ -157,18 +140,11 @@
   }
 
   .nav-link {
-    width: 100%;
     text-align: center;
-    padding: 0.75rem;
-    border-radius: 5px;
   }
 
-  .nav-link::after {
-    display: none;
-  }
-
-  .company-name {
-    font-size: clamp(1.3rem, 2vw, 1.5rem);
+  .user-profile {
+    gap: 0.5rem;
   }
 
   .user-image {
@@ -200,12 +176,7 @@
   }
 
   .nav-link:hover {
-    background: rgba(144, 205, 244, 0.1);
     color: #90cdf4;
-  }
-
-  .nav-link::after {
-    background-color: #90cdf4;
   }
 
   .user-image {
@@ -215,11 +186,5 @@
 
   .user-image:hover {
     border-color: #63b3ed;
-  }
-
-  @media (max-width: 768px) {
-    .navbar-links {
-      background: #1a202c;
-    }
   }
 }

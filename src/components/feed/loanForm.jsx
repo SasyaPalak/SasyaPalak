@@ -34,6 +34,7 @@ const LoanForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     setLoading(true);
     setError(null);
 
@@ -41,7 +42,10 @@ const LoanForm = () => {
       const response = await axios.post("/loan-form/", formData);
       setLoanStatus(response.data.loan_status);
 
-      if (response.data.loan_status === "Eligible") {
+      if (response.data.loan_status === "Y") {
+        
+        localStorage.setItem('loan_amount', formData.LoanAmount);
+        localStorage.setItem('loan_tenure', formData.Loan_Amount_Term);
         navigate("/crop-yield");
       }
     } catch (err) {
