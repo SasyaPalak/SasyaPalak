@@ -11,6 +11,9 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
 
+class VerifySerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.IntegerField()
 
 class ChangePasswordSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -36,3 +39,27 @@ class PasswordResetVerifySerializer(serializers.Serializer):
 class PasswordChangeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     new_password = serializers.CharField(write_only=True)
+
+
+class LoanCalculationSerializer(serializers.Serializer):
+    crop_name = serializers.CharField(max_length=255)
+    crop_yield_prediction = serializers.DecimalField(max_digits=10, decimal_places=2)
+    market_price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    loan_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    loan_tenure_years = serializers.IntegerField()
+    interest_rate = serializers.DecimalField(max_digits=5, decimal_places=2)  # Interest rate in percentage
+
+    expected_revenue = serializers.SerializerMethodField()
+    total_repayment = serializers.SerializerMethodField()
+    net_income = serializers.SerializerMethodField()
+
+    def get_expected_revenue(self, obj):
+        return obj['crop_yield_prediction'] * obj['market_price']
+
+    def get_total_repayment(self, obj):
+        return obj['loan_amount'] * ((1 + obj['interest_rate'] / 100) ** obj['loan_tenure_years'])
+
+    def get_net_income(self, obj):
+        expected_revenue = self.get_expected_revenue(obj)
+        total_repayment = self.get_total_repayment(obj)
+        return expected_revenue - total_repayment

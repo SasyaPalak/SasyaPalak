@@ -4,17 +4,16 @@ from django.contrib.auth.hashers import make_password, check_password
 
 
 
-
-class User(models.Model):
-    GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Other'),
+GENDER_CHOICES = [
+    ('Male', 'Male'),
+    ('Female', 'Female'),
+    ('Other', 'Other'),
+    ('Rather Not Say', 'Rather Not Say')
     ]
-
+class User(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
     address = models.TextField()

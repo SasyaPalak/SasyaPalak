@@ -30,7 +30,9 @@ SECRET_KEY = 'django-insecure-wzjf!sbpge+cyznc9f%5)=xlk^_npfe2fttcxzi^mq$i(gtd-q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+
 
 
 # Application definition
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'corsheaders',
+    'user_sessions',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 MIDDLEWARE = [
@@ -56,7 +59,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'user_sessions.middleware.SessionMiddleware',
+    
 ]
+SESSION_ENGINE = 'user_sessions.backends.db'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -167,3 +177,10 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
+
+CORS_ALLOWED_ORIGIN = [
+    "http://localhost:3000"  # React dev server
+    "http://192.168.137.70:3000", 
+    "http://locahost:5173"
+]
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'

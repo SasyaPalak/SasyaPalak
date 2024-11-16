@@ -11,18 +11,25 @@ from .serializers import (
     PasswordResetRequestSerializer,
     PasswordResetVerifySerializer,
     PasswordChangeSerializer,
+    LoanCalculationSerializer
 )
 from .serializers import ChangePasswordSerializer
 import logging
 from api.models import User
 from django.http import JsonResponse
 import traceback
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 
 CACHE_TIMEOUT = 300  # 5 minutes
 
 @api_view(['POST'])
 def register_user(request):
+    print("Request Data:", request.data)  # Print the incoming request data for debugging
     serializer = UserSerializer(data=request.data)
+    
     if serializer.is_valid():
         email = serializer.validated_data['email']
 
@@ -40,17 +47,32 @@ def register_user(request):
             {'message': 'Check your email for the verification code.'}, 
             status=status.HTTP_200_OK
         )
+    
+    # Print detailed errors if the serializer is not valid
+    print("Serializer Errors:", serializer.errors)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    
+    print("Serializer Errors:", serializer.errors)  # Debugging line
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def verify_user(request):
+    # Extract email and code from the request data
     email = request.data.get('email')
-    code = request.data.get('code')
+    code = request.data.get('code')  # Ensure 'code' is being used
 
-    # Retrieve the stored verification code and user data
+    # Debugging: Log incoming data
+    print("Received Email:", email)
+    print("Received OTP Code:", code)
+
+    # Retrieve the stored verification code and user data from the cache
     stored_code = cache.get(f"verification_code_{email}")
     user_data = cache.get(f"temp_user_{email}")
+
+    # More debugging
+    print("Stored Code from Cache:", stored_code)
+    print("User Data from Cache:", user_data)
 
     if not stored_code or not user_data:
         return Response({'error': 'Verification code expired or invalid.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -61,8 +83,24 @@ def verify_user(request):
         cache.delete(f"temp_user_{email}")
         cache.delete(f"verification_code_{email}")
         return Response({'message': 'Email verified and user registered successfully.'}, status=status.HTTP_201_CREATED)
-    
+
     return Response({'error': 'Invalid verification code.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth import login, logout
+from .serializers import LoginSerializer
+from .models import User
+
+@api_view(['POST'])
+def login_user(request):
+    from django.contrib.auth import login
+
+
 
 @api_view(['POST'])
 def login_user(request):
@@ -77,6 +115,17 @@ def login_user(request):
                 return Response({'error': 'Email is not verified.'}, status=status.HTTP_400_BAD_REQUEST)
 
             if check_password(password, user.password):
+                # Check if there's already a list of emails in the session
+                logged_users = request.session.get('logged_in_users', [])
+                
+                # Add the new email to the list if it's not already there
+                if email not in logged_users:
+                    logged_users.append(email)
+                
+                # Save the updated list back to the session
+                request.session['logged_in_users'] = logged_users
+                request.session.save()
+                
                 return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
             else:
                 return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
@@ -85,6 +134,10 @@ def login_user(request):
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
 
 logger = logging.getLogger(__name__)
 @api_view(['POST'])
@@ -233,3 +286,30 @@ def loan_prediction(request):
         return Response({'Loan_Status': prediction}, status=200)
     except Exception as e:
         return Response({'error': str(e)}, status=500)
+
+
+class LoanCalculationView(APIView):
+    def post(self, request):
+        # Extract values from the request data
+        crop_yield = request.data.get('crop_yield_prediction')
+        market_price = request.data.get('market_price')
+        loan_amount = request.data.get('loan_amount_requested')
+        interest_rate = request.data.get('interest_rate')
+        loan_tenure = request.data.get('loan_tenure')
+
+        # Calculate Expected Revenue (correct formula)
+        expected_revenue = crop_yield * market_price
+
+        # Calculate Total Repayment (simple interest)
+        total_repayment = loan_amount * (1 + interest_rate * loan_tenure)
+
+        # Calculate Net Income
+        net_income = expected_revenue - total_repayment
+
+        # Return the results in the response
+        return Response({
+            'expected_revenue': expected_revenue,
+            'total_repayment': total_repayment,
+            'net_income': net_income
+        }, status=status.HTTP_200_OK)
+    
