@@ -12,7 +12,7 @@ function Footer() {
             <img src={logo} alt="AgriSmart Solutions Logo" className="logo" />
           </div>
           <h2 className="company-name">AgriSmart Solutions</h2>
-          <p>
+          <p className="company-description">
             Empowering agriculture with technology for a sustainable future.
           </p>
         </div>
@@ -30,7 +30,7 @@ function Footer() {
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3533.4061676130814!2d85.31137257481387!3d27.673838726969812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19007c081f3b%3A0xabccae09a15d0cde!2sBuddha%20Tech%20Pvt.%20Ltd!5e0!3m2!1sen!2snp!4v1731728506223!5m2!1sen!2snp"
             title="Our Location"
-            width="300"
+            width="100%"
             height="150"
             style={{ border: 0 }}
             allowFullScreen=""

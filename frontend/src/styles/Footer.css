@@ -1,21 +1,23 @@
 .footer {
-  background-color: #004d40; 
+  background-color: #2c5282; /* Match home page theme */
   color: white;
-  padding: 20px;
+  padding: 4rem 2rem;
   text-align: center;
 }
 
 .footer-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: flex-start;
-  gap: 20px;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .footer-info {
   flex: 1;
-  min-width: 200px;
+  min-width: 250px;
   text-align: left;
 }
 
@@ -26,21 +28,38 @@
 }
 
 .company-name {
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1.6rem;
+  color: #ffffff;
+  font-weight: 700;
   margin-bottom: 10px;
+}
+
+.company-description {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 15px;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .footer-contact,
 .footer-map {
   flex: 1;
-  min-width: 200px;
+  min-width: 250px;
   text-align: left;
 }
 
 .footer-contact h3,
 .footer-map h3 {
+  color: #ffffff;
+  font-size: 1.2rem;
   margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.footer-contact p,
+.footer-map p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
 }
 
 .footer-map iframe {
@@ -60,5 +79,9 @@
   .footer-contact,
   .footer-map {
     text-align: center;
+  }
+
+  .footer-logo .logo {
+    width: 50px;
   }
 }

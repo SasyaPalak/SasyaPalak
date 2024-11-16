@@ -1,0 +1,180 @@
+/* Main container styling */
+.loan-form-container {
+  max-width: 800px;
+  margin: 100px auto 40px;
+  padding: 2rem;
+  background: #f9fafb; /* Light neutral background */
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.loan-form-container h2 {
+  color: #4a5568; /* Softer color */
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Label styling */
+label {
+  color: #2d3748;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Specific label styling for white font color */
+label.white-label {
+  color: white;
+}
+
+/* Radio button container */
+.radio-group {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  margin-top: 0.5rem;
+  flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+.radio-group label {
+  margin: 0;
+  margin-left: 0.5rem;
+  font-weight: normal;
+}
+
+/* Radio buttons */
+input[type="radio"] {
+  accent-color: #4a5568; /* Softer color */
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Text/Number input styling */
+input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #4a5568;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+  background: #ffffff;
+  color: #2d3748;
+  appearance: textfield; /* Removes number arrows */
+}
+
+input[type="number"]:focus {
+  border-color: #2d3748;
+  box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.2);
+}
+
+/* Submit button styling */
+button[type="submit"] {
+  background: #4a5568;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+button[type="submit"]:hover {
+  background: #2d3748;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 85, 104, 0.2);
+}
+
+button[type="submit"]:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Loan status message */
+h3 {
+  text-align: center;
+  margin-top: 2rem;
+  color: #4a5568;
+  font-weight: 600;
+}
+
+/* Error message */
+p.error-message {
+  text-align: center;
+  margin-top: 1rem;
+  color: #e53e3e;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .loan-form-container {
+    margin: 80px 1rem 20px;
+    padding: 1.5rem;
+  }
+
+  .loan-form-container h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .loan-form-container {
+    background: #2d3748;
+  }
+
+  .loan-form-container h2,
+  h3 {
+    color: #cbd5e0;
+  }
+
+  label {
+    color: #e2e8f0;
+  }
+
+  label.white-label {
+    color: #e2e8f0;
+  }
+
+  input[type="number"] {
+    background: #1a202c;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+
+  input[type="number"]:focus {
+    border-color: #a0aec0;
+  }
+
+  input[type="radio"] {
+    accent-color: #a0aec0;
+  }
+
+  button[type="submit"] {
+    background: #4a5568;
+  }
+
+  button[type="submit"]:hover {
+    background: #2c5282;
+  }
+
+  button[type="submit"]:disabled {
+    background: #4a5568;
+  }
+}

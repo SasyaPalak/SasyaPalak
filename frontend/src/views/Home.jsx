@@ -1,97 +1,69 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Home.css";
+import Footer from "../components/layout/footer";
 import logo from "../assets/test.jpg";
 
 function Home() {
   return (
-    <div className="home-container">
-      {/* Navbar */}
-      <nav className="navbar">
-        <div className="navbar-brand">
-          <h1>AgriSmart Solutions</h1>
-        </div>
-        <div className="navbar-links">
-          <Link to="/login" className="nav-link">
+    <div className="home">
+      {/* Hero Section */}
+      <section className="hero">
+        <h1 className="hero-title">
+          Empowering Agriculture with Smart Technology
+        </h1>
+        <p className="hero-subtitle">
+          AgriSmart Solutions leverages AI to provide farmers and stakeholders
+          with tools to enhance crop productivity, manage diseases, and access
+          financial resources seamlessly.
+        </p>
+        <div className="auth-buttons">
+          <Link to="/login" className="auth-button login-button">
             Login
           </Link>
-          <Link to="/signup" className="nav-link">
+          <Link to="/signup" className="auth-button signup-button">
             Signup
           </Link>
         </div>
-      </nav>
+      </section>
 
-      {/* Main Content */}
-      <main className="main-content">
-        <section className="intro-section">
-          <h2>Empowering Agriculture with Smart Technology</h2>
-          <p>
-            AgriSmart Solutions leverages AI to provide farmers and stakeholders
-            with tools to enhance crop productivity, manage diseases, and access
-            financial resources seamlessly.
+      {/* Services Section */}
+      <section className="services">
+        <div className="service-card">
+          <h2 className="service-title">Loan Eligibility</h2>
+          <p className="service-description">
+            Find out if you qualify for a loan to support your agricultural
+            needs.
           </p>
-        </section>
+          <Link to="/loan-form" className="service-button">
+            Check Eligibility
+          </Link>
+        </div>
 
-        <section className="features-section">
-          <div className="feature">
-            <h3>Loan Eligibility</h3>
-            <p>
-              Find out if you qualify for a loan to support your agricultural
-              needs.
-            </p>
-            <Link to="/loan-form" className="feature-link">
-              Check Eligibility
-            </Link>
-          </div>
-          <div className="feature">
-            <h3>Crop Yield Prediction</h3>
-            <p>
-              Predict the yield of your crops based on soil, climate, and other
-              parameters.
-            </p>
-            <Link to="/crop-yield" className="feature-link">
-              Predict Now
-            </Link>
-          </div>
-          <div className="feature">
-            <h3>Crop Disease Detection</h3>
-            <p>
-              Identify and prevent crop diseases using advanced image
-              recognition.
-            </p>
-            <Link to="/crop-disease" className="feature-link">
-              Diagnose Disease
-            </Link>
-          </div>
-        </section>
-      </main>
+        <div className="service-card">
+          <h2 className="service-title">Crop Yield Prediction</h2>
+          <p className="service-description">
+            Predict the yield of your crops based on soil, climate, and other
+            parameters.
+          </p>
+          <Link to="/crop-yield" className="service-button">
+            Predict Now
+          </Link>
+        </div>
+
+        <div className="service-card">
+          <h2 className="service-title">Crop Disease Detection</h2>
+          <p className="service-description">
+            Identify and prevent crop diseases using advanced image recognition.
+          </p>
+          <Link to="/disease-detection" className="service-button">
+            Diagnose Disease
+          </Link>
+        </div>
+      </section>
 
       {/* Footer */}
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-logo">
-            <img src={logo} alt="AgriSmart Solutions Logo" className="logo" />
-          </div>
-          <div className="footer-info">
-            <p>
-              <strong>Contact Us:</strong>
-            </p>
-            <p>Email: info@agrismartsolutions.com</p>
-            <p>Phone: +1-234-567-890</p>
-          </div>
-          <div className="footer-map">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3533.4061676130814!2d85.31137257481387!3d27.673838726969812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19007c081f3b%3A0xabccae09a15d0cde!2sBuddha%20Tech%20Pvt.%20Ltd!5e0!3m2!1sen!2snp!4v1731728506223!5m2!1sen!2snp"
-              title="Our Location"
-              width="300"
-              height="150"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-            ></iframe>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
