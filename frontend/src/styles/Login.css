@@ -1,0 +1,99 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #2c5282, #2a4365); /* Aesthetic gradient background */
+    color: #2d3748; /* Dark gray text color for contrast */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Login Container */
+  .login-container {
+    background: rgba(255, 255, 255, 0.95); /* Slightly translucent white */
+    padding: 30px;
+    width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add depth with shadow */
+    text-align: center;
+  }
+  
+  /* Login Header */
+  .login-container h2 {
+    font-size: 24px;
+    color: #2c5282; /* Primary color */
+    margin-bottom: 20px;
+  }
+  
+  /* Form Styles */
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  input {
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    border: 1px solid #a0aec0; /* Light gray border */
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  input:focus {
+    border-color: #2c5282; /* Highlight border on focus */
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background: #2c5282;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  button:disabled {
+    background: #718096; /* Gray for disabled state */
+    cursor: not-allowed;
+  }
+  
+  button:hover:not(:disabled) {
+    background: #1a365d;
+    transform: translateY(-2px); /* Subtle hover effect */
+  }
+  
+  /* Message Styles */
+  p {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  p a {
+    color: #2c5282;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  p a:hover {
+    color: #1a365d; /* Darker blue on hover */
+  }
+  
+  /* Error/Success Messages */
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .success-message {
+    color: green;
+    font-weight: bold;
+  }
+  

@@ -1,11 +1,21 @@
 /* UserProfile Styles */
 .user-profile {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: 30px;
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(135deg, rgba(44, 82, 130, 0.8), rgba(255, 255, 255, 0.5));
+  border-radius: 15px; /* Smooth, rounded corners */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
+  max-width: 650px;
+  margin: auto;
+  margin-top: 50px;
+  text-align: center;
+  color: #ffffff; /* Default text color for the container */
+  backdrop-filter: blur(8px); /* Adds a frosted glass effect */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border for refinement */
 }
 
 .profile-section {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .profile-image img {
@@ -13,43 +23,90 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.8); /* White border for contrast */
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3); /* Glow around the image */
+}
+
+label {
+  display: block;
+  font-size: 18px;
+  color: #e0e7ff; /* Soft pastel text color */
+  font-weight: 600;
+  margin-bottom: 5px;
 }
 
 input {
-  margin-bottom: 10px;
-  padding: 8px;
+  margin-bottom: 15px;
+  padding: 10px;
   width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #2c5282; /* Text inside input fields */
+  background: rgba(255, 255, 255, 0.8);
+  outline: none;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #e0e7ff;
+  background: rgba(255, 255, 255, 1);
 }
 
 .profile-buttons button {
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 12px 25px;
+  border-radius: 25px;
   border: none;
   cursor: pointer;
-  background-color: #4caf50;
-  color: white;
-  margin-top: 10px;
+  background: linear-gradient(135deg, #2c5282, #6b8bbe);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .profile-buttons button:hover {
-  background-color: #45a049;
+  background: linear-gradient(135deg, #1a365d, #4a72a5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(44, 82, 130, 0.4);
 }
 
 .success-message {
-  color: green;
+  color: #38e69b; /* Vibrant green success message */
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 .error-message {
-  color: red;
+  color: #ff6b6b; /* Bright red error message */
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 .reset-password-link {
-  color: #3498db;
+  color: #e0e7ff; /* Matches the pastel color theme */
   text-decoration: none;
+  font-weight: bold;
 }
 
 .reset-password-link:hover {
   text-decoration: underline;
+  color: #ffffff;
 }
+
+h2 {
+  font-size: 30px;
+  color: #ffffff;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* Subtle shadow for header */
+}
+
+h3 {
+  font-size: 22px;
+  color: #e0e7ff;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
