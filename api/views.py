@@ -88,20 +88,6 @@ def verify_user(request):
 
 
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth import login, logout
-from .serializers import LoginSerializer
-from .models import User
-
-@api_view(['POST'])
-def login_user(request):
-    from django.contrib.auth import login
-
-
-
 @api_view(['POST'])
 def login_user(request):
     serializer = LoginSerializer(data=request.data)
@@ -115,17 +101,6 @@ def login_user(request):
                 return Response({'error': 'Email is not verified.'}, status=status.HTTP_400_BAD_REQUEST)
 
             if check_password(password, user.password):
-                # Check if there's already a list of emails in the session
-                logged_users = request.session.get('logged_in_users', [])
-                
-                # Add the new email to the list if it's not already there
-                if email not in logged_users:
-                    logged_users.append(email)
-                
-                # Save the updated list back to the session
-                request.session['logged_in_users'] = logged_users
-                request.session.save()
-                
                 return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
             else:
                 return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
