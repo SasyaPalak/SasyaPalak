@@ -1,10 +1,15 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import "../styles/Admin.css";
+import Navbar from "../components/layout/navbar";
+import Footer from "../components/layout/footer";
 
 function AdminDashboard() {
   return (
     <div className="admin-dashboard">
+      {/*Navbar*/}
+      <Navbar />
+
       <header className="header">
         <h2>Admin Panel</h2>
       </header>
@@ -29,6 +34,9 @@ function AdminDashboard() {
       <div className="main-content">
         <Outlet />
       </div>
+
+      {/*Footer*/}
+      <Footer />
     </div>
   );
 }

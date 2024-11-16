@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Navbar from "../layout/navbar";
+import Footer from "../layout/footer";
 
 const ViewMessage = () => {
   const [messages, setMessages] = useState([]);
@@ -18,7 +20,6 @@ const ViewMessage = () => {
   };
 
   const handleMessageSeenChange = (index) => {
-    // Toggle the 'seen' status for visual confirmation
     const updatedMessages = [...messages];
     updatedMessages[index].seen = !updatedMessages[index].seen;
     setMessages(updatedMessages);
@@ -34,6 +35,9 @@ const ViewMessage = () => {
 
   return (
     <div style={{ padding: "20px" }}>
+      {/*Navbar*/}
+      <Navbar />
+      
       <h2>Messages</h2>
       {messageFeedback && <p style={{ color: "red" }}>{messageFeedback}</p>}
       <table border="1" style={{ width: "100%", marginTop: "20px" }}>
@@ -56,7 +60,7 @@ const ViewMessage = () => {
                   <input
                     type="checkbox"
                     checked={message.seen || false}
-                    onChange={() => handleMessageSeenChange(index)} 
+                    onChange={() => handleMessageSeenChange(index)}
                   />
                 </td>
               </tr>
@@ -68,6 +72,8 @@ const ViewMessage = () => {
           )}
         </tbody>
       </table>
+      {/*Footer*/}#
+      <Footer />
     </div>
   );
 };

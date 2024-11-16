@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Navbar from "../components/layout/navbar";
+import Footer from "../components/layout/footer";
 
 function ContactUs() {
   const [formData, setFormData] = useState({
@@ -47,10 +49,14 @@ function ContactUs() {
     } catch (error) {
       if (error.response) {
         // Errors returned by the server
-        setFeedback(`Error: ${error.response.data?.message || "Server error occurred."}`);
+        setFeedback(
+          `Error: ${error.response.data?.message || "Server error occurred."}`
+        );
       } else if (error.request) {
         // Network or client-side issues
-        setFeedback("Error: Unable to connect to the server. Please try again.");
+        setFeedback(
+          "Error: Unable to connect to the server. Please try again."
+        );
       } else {
         // Other unexpected errors
         setFeedback("Error: Something went wrong. Please try again.");
@@ -63,6 +69,9 @@ function ContactUs() {
 
   return (
     <div style={{ maxWidth: "500px", margin: "auto", padding: "20px" }}>
+      {/*Navbar*/}
+      <Navbar />
+
       <h2>Contact Us</h2>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "10px" }}>
@@ -147,6 +156,9 @@ function ContactUs() {
           {feedback}
         </p>
       )}
+
+      {/*Footer */}
+      <Footer />
     </div>
   );
 }

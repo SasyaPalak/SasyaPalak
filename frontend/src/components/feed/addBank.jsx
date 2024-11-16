@@ -1,6 +1,8 @@
 // AddBank.jsx
 import React, { useState } from "react";
 import axios from "axios";
+import Navbar from "../layout/navbar";
+import Footer from "../layout/footer";
 
 const AddBank = () => {
   const [bankData, setBankData] = useState({
@@ -50,6 +52,9 @@ const AddBank = () => {
 
   return (
     <div style={{ padding: "20px" }}>
+      {/*Navbar*/}
+      <Navbar />
+
       <h2>Add Bank</h2>
       <form onSubmit={handleAddBank}>
         <div>
@@ -103,6 +108,9 @@ const AddBank = () => {
           {bankFeedback}
         </p>
       )}
+
+      {/*Footer*/}
+      <Footer />
     </div>
   );
 };

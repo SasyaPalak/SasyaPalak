@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "../routes/axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/layout/navbar";
+import Footer from "../components/layout/footer";
 
 function OTPVerify() {
   const [otp, setOtp] = useState("");
@@ -50,6 +52,9 @@ function OTPVerify() {
 
   return (
     <div>
+      {/*Navbar */}
+      <Navbar />
+
       <h2>Enter OTP</h2>
       <form onSubmit={handleOTPVerify}>
         <input
@@ -64,6 +69,9 @@ function OTPVerify() {
         </button>
       </form>
       {message && <p style={{ color: error ? "red" : "green" }}>{message}</p>}
+
+      {/*Footer*/}
+      <Footer />
     </div>
   );
 }

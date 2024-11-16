@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Navbar from "../layout/navbar";
+import Footer from "../layout/footer";
+import "../../styles/CropYield.css";
 
 function CropYield() {
   const [formData, setFormData] = useState({
@@ -92,102 +95,110 @@ function CropYield() {
   };
 
   return (
-    <div className="crop-yield-form">
-      <h2>Crop Yield Form</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Region */}
-        <label htmlFor="region">Region:</label>
-        <select
-          id="region"
-          name="region"
-          value={formData.region}
-          onChange={handleChange}
-          required
-        >
-          <option value="">-- Select Region --</option>
-          {regions.map((region) => (
-            <option key={region} value={region}>
-              {region}
-            </option>
-          ))}
-        </select>
-        <br />
+    <div>
+      {/* Navbar */}
+      <Navbar />
 
-        {/* Season */}
-        <label htmlFor="season">Season:</label>
-        <select
-          id="season"
-          name="season"
-          value={formData.season}
-          onChange={handleChange}
-          required
-        >
-          <option value="">-- Select Season --</option>
-          {seasons.map((season) => (
-            <option key={season} value={season}>
-              {season}
-            </option>
-          ))}
-        </select>
-        <br />
+      <div className="crop-yield-form">
+        <h2>Crop Yield Form</h2>
+        <form onSubmit={handleSubmit}>
+          {/* Region */}
+          <label htmlFor="region">Region:</label>
+          <select
+            id="region"
+            name="region"
+            value={formData.region}
+            onChange={handleChange}
+            required
+          >
+            <option value="">-- Select Region --</option>
+            {regions.map((region) => (
+              <option key={region} value={region}>
+                {region}
+              </option>
+            ))}
+          </select>
+          <br />
 
-        {/* Crop */}
-        <label htmlFor="crop">Crop:</label>
-        <select
-          id="crop"
-          name="crop"
-          value={formData.crop}
-          onChange={handleChange}
-          required
-        >
-          <option value="">-- Select Crop --</option>
-          {crops.map((crop) => (
-            <option key={crop} value={crop}>
-              {crop}
-            </option>
-          ))}
-        </select>
-        <br />
+          {/* Season */}
+          <label htmlFor="season">Season:</label>
+          <select
+            id="season"
+            name="season"
+            value={formData.season}
+            onChange={handleChange}
+            required
+          >
+            <option value="">-- Select Season --</option>
+            {seasons.map((season) => (
+              <option key={season} value={season}>
+                {season}
+              </option>
+            ))}
+          </select>
+          <br />
 
-        {/* Production */}
-        <label htmlFor="production">Production (tons):</label>
-        <input
-          type="number"
-          id="production"
-          name="production"
-          value={formData.production}
-          onChange={handleChange}
-          placeholder="Enter production (tons)"
-          min="0"
-          step="0.1"
-          required
-        />
-        <br />
+          {/* Crop */}
+          <label htmlFor="crop">Crop:</label>
+          <select
+            id="crop"
+            name="crop"
+            value={formData.crop}
+            onChange={handleChange}
+            required
+          >
+            <option value="">-- Select Crop --</option>
+            {crops.map((crop) => (
+              <option key={crop} value={crop}>
+                {crop}
+              </option>
+            ))}
+          </select>
+          <br />
 
-        {/* Area */}
-        <label htmlFor="area">Area (hectares):</label>
-        <input
-          type="number"
-          id="area"
-          name="area"
-          value={formData.area}
-          onChange={handleChange}
-          placeholder="Enter area (hectares)"
-          min="0"
-          step="0.1"
-          required
-        />
-        <br />
+          {/* Production */}
+          <label htmlFor="production">Production (tons):</label>
+          <input
+            type="number"
+            id="production"
+            name="production"
+            value={formData.production}
+            onChange={handleChange}
+            placeholder="Enter production (tons)"
+            min="0"
+            step="0.1"
+            required
+          />
+          <br />
 
-        {/* Submit Button */}
-        <button type="submit" disabled={loading}>
-          {loading ? "Submitting..." : "Submit"}
-        </button>
-      </form>
+          {/* Area */}
+          <label htmlFor="area">Area (hectares):</label>
+          <input
+            type="number"
+            id="area"
+            name="area"
+            value={formData.area}
+            onChange={handleChange}
+            placeholder="Enter area (hectares)"
+            min="0"
+            step="0.1"
+            required
+          />
+          <br />
 
-      {/* Messages */}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {error && <p className="error-message">{error}</p>}
+          {/* Submit Button */}
+          <button type="submit" disabled={loading}>
+            {loading ? "Submitting..." : "Submit"}
+          </button>
+        </form>
+
+        {/* Messages */}
+        {successMessage && <p className="success-message">{successMessage}</p>}
+        {error && <p className="error-message">{error}</p>}
+      </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

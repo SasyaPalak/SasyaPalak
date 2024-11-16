@@ -6,10 +6,12 @@ import OTPRequest from "./views/otpRequest.jsx";
 import OTPVerify from "./views/otpVerify.jsx";
 import Home from "./views/Home.jsx";
 import ContactUs from "./utils/ContactUs.jsx";
+import UserProfile from "./components/profile/userProfile.jsx";
+import ResetPassword from "./components/auth/resetPassword.jsx";
 import AdminDashboard from "./views/adminDashboard.jsx";
 import AddBank from "./components/feed/addBank.jsx";
 import ViewMessages from "./components/feed/viewMessage.jsx";
-import LoanForm from "./components/feed/LoanForm.jsx";
+import LoanForm from "./components/feed/loanForm.jsx";
 import CropYield from "./components/feed/cropPrediction.jsx";
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
         <Route path="/request-otp" element={<OTPRequest />} />
         <Route path="/verify-otp" element={<OTPVerify />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/api/user/profile" element={<UserProfile />} />
+        <Route path="/api/user/reset-password" element={<ResetPassword />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/add-bank" element={<AddBank />} />
         <Route path="/admin/view-message" element={<ViewMessages />} />

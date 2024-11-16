@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "../routes/axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/layout/navbar";
+import Footer from "../components/layout/footer";
 
 function OTPRequest() {
   const [email, setEmail] = useState("");
@@ -42,6 +44,9 @@ function OTPRequest() {
 
   return (
     <div>
+      {/*Navbar*/}
+      <Navbar />
+
       <h2>Request OTP</h2>
       <form onSubmit={handleOTPRequest}>
         <input
@@ -56,6 +61,9 @@ function OTPRequest() {
         </button>
       </form>
       {message && <p style={{ color: error ? "red" : "green" }}>{message}</p>}
+
+      {/*Footer*/}
+      <Footer />
     </div>
   );
 }
